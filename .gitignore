@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+# EPANET temp files written by wntr.sim.EpanetSimulator
+temp*.inp
+temp*.rpt
+temp*.bin
+*.rpt
+*.bin
