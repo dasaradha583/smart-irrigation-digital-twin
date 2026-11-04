@@ -1,0 +1,5 @@
+plot,irrigation_events,gross_irrigation_m3,rain_mm,etc_mm,eta_mm,stress_days
+Plot_A,55,4125.0,84.0,754.4,754.4,0
+Plot_B,59,4425.0,38.6,786.3,786.3,0
+Plot_C,61,4575.0,25.3,818.5,818.5,0
+Plot_D,66,4950.0,24.5,848.4,848.4,0

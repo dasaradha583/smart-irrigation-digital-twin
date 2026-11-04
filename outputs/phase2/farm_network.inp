@@ -1,0 +1,149 @@
+; Filename: farm_irrigation_network
+; WNTR: 1.5.0
+; Created: 2026-11-04 07:06:19
+[TITLE]
+
+[JUNCTIONS]
+;ID                      Elevation       Demand Pattern                 
+ J1                       32.80839895               0                            ;
+ J2                      34.448818898               0                            ;
+ J3                      36.089238845    44.028675393 IRRIGATION                 ;
+ J4                       39.37007874    44.028675393 IRRIGATION                 ;
+ J5                      34.448818898               0                            ;
+ J6                      37.729658793    44.028675393 IRRIGATION                 ;
+ J7                      41.010498688    44.028675393 IRRIGATION                 ;
+
+[RESERVOIRS]
+;ID                                   Head                  Pattern
+ R1                       26.24671916                            ;
+
+[TANKS]
+;ID                              Elevation           Init Level            Min Level            Max Level             Diameter           Min Volume Volume Curve         Overflow            
+ T1                       98.42519685     9.842519685    1.6404199475    16.404199475     19.68503937               0                                             ;
+
+[PIPES]
+;ID                   Node1                Node2                              Length             Diameter            Roughness           Minor Loss               Status
+ P1                   J1                   J2                      820.20997375     5.905511811             140               0                 Open   ;
+ P2                   J2                   J3                       984.2519685    4.9212598425             140               0                 Open   ;
+ P3                   J3                   J4                       984.2519685     3.937007874             140               0                 Open   ;
+ P4                   J2                   J5                       984.2519685    4.9212598425             140               0                 Open   ;
+ P5                   J5                   J6                       984.2519685     3.937007874             140               0                 Open   ;
+ P6                   J6                   J7                       984.2519685     3.937007874             140               0                 Open   ;
+ P7                   J3                   J6                       984.2519685    3.1496062992             140               0                 Open   ;
+ PT                   J2                   T1                       328.0839895     5.905511811             140               0                 Open   ;
+
+[PUMPS]
+;ID                   Node1                Node2                Properties          
+ PU1                  R1                   J1                   HEAD     PU1_CURVE              ;
+
+[VALVES]
+;ID                   Node1                Node2                            Diameter Type              Setting           Minor Loss
+
+[TAGS]
+;type      name       tag       
+
+[DEMANDS]
+;ID        Demand     Pattern   
+
+[STATUS]
+;ID        Setting   
+
+[PATTERNS]
+;ID        Multipliers
+
+IRRIGATION 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000
+IRRIGATION 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000
+IRRIGATION 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000
+IRRIGATION 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000
+
+[CURVES]
+;ID         X-Value      Y-Value     
+;PUMP: PU1_CURVE
+ PU1_CURVE    237.754847    82.020997   ;
+
+
+[CONTROLS]
+Pump PU1 Open IF Tank T1 below 6.561679790026246
+Pump PU1 Closed IF Tank T1 above 14.763779527559054
+
+[RULES]
+
+[ENERGY]
+GLOBAL PRICE           0.0000
+
+[EMITTERS]
+;ID        Flow coefficient
+
+[QUALITY]
+
+[SOURCES]
+;Node      Type       Quality    Pattern   
+
+[REACTIONS]
+;Type           Pipe/Tank               Coefficient
+
+ ORDER BULK 1
+ ORDER TANK 1
+ ORDER WALL 1
+ GLOBAL BULK 0.0000    
+ GLOBAL WALL 0.0000    
+
+[MIXING]
+;Tank ID             Model Fraction
+
+[TIMES]
+DURATION             24:00:00
+HYDRAULIC TIMESTEP   00:01:00
+QUALITY TIMESTEP     00:06:00
+PATTERN TIMESTEP     01:00:00
+PATTERN START        00:00:00
+REPORT TIMESTEP      00:01:00
+REPORT START         00:00:00
+START CLOCKTIME      00:00:00 AM
+RULE TIMESTEP        00:06:00
+STATISTIC            NONE      
+
+[REPORT]
+
+[OPTIONS]
+UNITS                GPM                 
+HEADLOSS             H-W                 
+SPECIFIC GRAVITY     1
+VISCOSITY            1
+TRIALS               200
+ACCURACY             0.001
+CHECKFREQ            2
+MAXCHECK             10
+UNBALANCED           STOP                
+PATTERN              1                   
+DEMAND MULTIPLIER    1
+DEMAND MODEL         PDA
+MINIMUM PRESSURE     0.00
+REQUIRED PRESSURE    21.32
+PRESSURE EXPONENT    0.5
+EMITTER EXPONENT     0.5
+QUALITY              NONE                
+DIFFUSIVITY          1
+TOLERANCE            0.01
+
+[COORDINATES]
+;Node      X-Coord    Y-Coord   
+R1                  0.000000000          0.000000000
+J1                 50.000000000          0.000000000
+J2                300.000000000          0.000000000
+J3                600.000000000          0.000000000
+J4                900.000000000          0.000000000
+J5                300.000000000       -300.000000000
+J6                600.000000000       -300.000000000
+J7                900.000000000       -300.000000000
+T1                400.000000000       -100.000000000
+
+[VERTICES]
+;Link      X-Coord    Y-Coord   
+
+[LABELS]
+
+[BACKDROP]
+UNITS    NONE
+
+[END]

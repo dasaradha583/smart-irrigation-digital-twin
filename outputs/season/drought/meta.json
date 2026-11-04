@@ -1,0 +1,20 @@
+{
+  "scenario": "drought",
+  "description": "Failed rains (rain x 0), 10 % higher evaporative demand, and the well water level 6 m lower.",
+  "summary": {
+    "requested_m3": 20850.0,
+    "delivered_m3": 20850.000001214044,
+    "delivered_pct": 100.00000000582276,
+    "pumped_m3": 20882.349391033713,
+    "leak_m3": 0.0,
+    "pump_energy_kwh": 2381.761553491283,
+    "stress_days_total": 0,
+    "mean_relative_yield": 1.0,
+    "min_relative_yield": 1.0,
+    "days_low_pressure": 0
+  },
+  "ky": "1.25",
+  "operation": "{'window_start_hour': 6, 'window_hours': 12}",
+  "start": "2023-11-01",
+  "end": "2024-04-19"
+}

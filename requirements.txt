@@ -1,0 +1,9 @@
+wntr>=1.2
+numpy
+pandas
+matplotlib
+networkx
+scikit-learn
+streamlit
+plotly
+pytest

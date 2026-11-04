@@ -1,0 +1,20 @@
+{
+  "scenario": "drought_pump_failure",
+  "description": "Drought plus the 1-10 Feb pump outage: the limited-supply case for the schedule optimiser.",
+  "summary": {
+    "requested_m3": 22125.0,
+    "delivered_m3": 19463.125001135046,
+    "delivered_pct": 87.96892655880247,
+    "pumped_m3": 19495.8281978328,
+    "leak_m3": 0.0,
+    "pump_energy_kwh": 2224.115798004993,
+    "stress_days_total": 64,
+    "mean_relative_yield": 0.9225451478350611,
+    "min_relative_yield": 0.9180657406530421,
+    "days_low_pressure": 10
+  },
+  "ky": "1.25",
+  "operation": "{'window_start_hour': 6, 'window_hours': 12}",
+  "start": "2023-11-01",
+  "end": "2024-04-19"
+}

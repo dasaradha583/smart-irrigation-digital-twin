@@ -1,0 +1,16 @@
+name,value,unit,source
+Pipe material / Hazen-Williams C,PVC / 140,-,Assumption; typical new PVC
+Pipe diameters,80-150,mm,Assumption; sized for < 1.5 m/s at peak demand
+Pipe lengths,100-300,m,Assumption; plot layout on a ~1 km x 0.3 km farm
+Junction elevations,10.0-12.5,m,Assumption; nearly flat farm
+Sump water level (R1 head),8.0,m,Assumption
+Pump design point,15 L/s @ 25.0 m,-,Assumption; single-point curve
+Pump on / off tank level,2.0 / 4.5,m,Assumption
+Tank base elevation,30.0,m,Assumption; tower tank
+Tank diameter,6.0,m,Assumption
+Tank min / init / max level,0.5 / 3.0 / 5.0,m,Assumption
+Required pressure (full delivery),15.0,m,Assumption; sprinkler operating pressure
+Minimum pressure (zero delivery),0.0,m,WNTR default
+Pressure exponent,0.5,-,WNTR default (orifice behaviour)
+Hydraulic / pattern time step,60 / 3600,s,Project choice; 1 min keeps tank-limit error under 1 m^3 per event
+Leak discharge coefficient,0.75,-,WNTR default

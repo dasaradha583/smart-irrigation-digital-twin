@@ -1,0 +1,115 @@
+{
+  "random_forest": {
+    "hourly_precision": 0.9874005305039788,
+    "hourly_recall": 0.8606936416184972,
+    "event_detection_rate": 0.9791666666666666,
+    "median_delay_h": 1.0,
+    "false_alarm_day_rate": 0.05660377358490566,
+    "n_leak_days": 144,
+    "n_no_leak_days": 106,
+    "by_hole_cm": [
+      {
+        "hole_cm": 0.8,
+        "detection_rate": 0.912,
+        "median_delay_h": 4.0,
+        "n": 34
+      },
+      {
+        "hole_cm": 1.5,
+        "detection_rate": 1.0,
+        "median_delay_h": 1.0,
+        "n": 31
+      },
+      {
+        "hole_cm": 2.5,
+        "detection_rate": 1.0,
+        "median_delay_h": 1.0,
+        "n": 37
+      },
+      {
+        "hole_cm": 4.0,
+        "detection_rate": 1.0,
+        "median_delay_h": 1.0,
+        "n": 42
+      }
+    ],
+    "by_pipe": [
+      {
+        "pipe": "P3",
+        "detection_rate": 0.974,
+        "median_delay_h": 1.0,
+        "n": 78
+      },
+      {
+        "pipe": "P7",
+        "detection_rate": 0.985,
+        "median_delay_h": 1.0,
+        "n": 66
+      }
+    ]
+  },
+  "threshold_rule": {
+    "hourly_precision": 0.9135893648449039,
+    "hourly_recall": 0.715028901734104,
+    "event_detection_rate": 0.8958333333333334,
+    "median_delay_h": 1.0,
+    "false_alarm_day_rate": 0.27358490566037735,
+    "n_leak_days": 144,
+    "n_no_leak_days": 106,
+    "by_hole_cm": [
+      {
+        "hole_cm": 0.8,
+        "detection_rate": 0.706,
+        "median_delay_h": 5.5,
+        "n": 34
+      },
+      {
+        "hole_cm": 1.5,
+        "detection_rate": 0.839,
+        "median_delay_h": 2.0,
+        "n": 31
+      },
+      {
+        "hole_cm": 2.5,
+        "detection_rate": 1.0,
+        "median_delay_h": 1.0,
+        "n": 37
+      },
+      {
+        "hole_cm": 4.0,
+        "detection_rate": 1.0,
+        "median_delay_h": 1.0,
+        "n": 42
+      }
+    ],
+    "by_pipe": [
+      {
+        "pipe": "P3",
+        "detection_rate": 0.897,
+        "median_delay_h": 1.0,
+        "n": 78
+      },
+      {
+        "pipe": "P7",
+        "detection_rate": 0.894,
+        "median_delay_h": 1.0,
+        "n": 66
+      }
+    ]
+  },
+  "random_forest_same_distribution": {
+    "hourly_precision": 0.991270611057226,
+    "hourly_recall": 0.888695652173913,
+    "event_detection_rate": 1.0,
+    "median_delay_h": 1.0,
+    "false_alarm_day_rate": 0.038461538461538464,
+    "n_leak_days": 98,
+    "n_no_leak_days": 52
+  },
+  "calibration": {
+    "threshold": 0.8499999999999999,
+    "persistence_h": 1,
+    "rule_persistence_h": 1,
+    "target": "false alarms on <= 5% of leak-free validation days"
+  }
+}

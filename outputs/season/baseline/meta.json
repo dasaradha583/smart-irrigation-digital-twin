@@ -1,0 +1,20 @@
+{
+  "scenario": "baseline",
+  "description": "Normal operation all season.",
+  "summary": {
+    "requested_m3": 18075.0,
+    "delivered_m3": 18075.000001103366,
+    "delivered_pct": 100.00000000610437,
+    "pumped_m3": 18085.04853440254,
+    "leak_m3": 0.0,
+    "pump_energy_kwh": 1739.5417614515877,
+    "stress_days_total": 0,
+    "mean_relative_yield": 1.0,
+    "min_relative_yield": 1.0,
+    "days_low_pressure": 0
+  },
+  "ky": "1.25",
+  "operation": "{'window_start_hour': 6, 'window_hours': 12}",
+  "start": "2023-11-01",
+  "end": "2024-04-19"
+}
