@@ -101,8 +101,11 @@ class Operation:
 
 #: A scheduler can rewrite the day's requests before they reach the network,
 #: for example to prioritise plots when supply is short.
-#: Signature: (date, requests_m3 by plot, plots, previous day's network log) -> requests_m3.
-Scheduler = Callable[[dt.date, dict[str, float], Sequence[Plot], dict | None], dict[str, float]]
+#: Signature: (date, requests_m3 by plot, plots, previous day's network log,
+#: today's observations) -> requests_m3. Today's observations are what an
+#: operator knows at the start of the day: the tank level and whether the
+#: pump is out of service.
+Scheduler = Callable[[dt.date, dict[str, float], Sequence[Plot], dict | None, dict], dict[str, float]]
 
 
 # ---------------------------------------------------------------------------
@@ -226,7 +229,9 @@ def run_season(plots: Sequence[Plot], weather: pd.DataFrame, scenario: Scenario,
         # 2-4. crop water use, soil balance, irrigation decision
         requests = {p.name: p.start_day(day, et0, rain) for p in plots}
         if scheduler is not None:
-            requests = scheduler(day, dict(requests), plots, prev_log)
+            today = {"tank_level_m": tank_level,
+                     "pump_outage": any(o.window_on(day) is not None for o in scenario.outages)}
+            requests = scheduler(day, dict(requests), plots, prev_log, today)
 
         # 5. hydraulics with the active scenario
         wn, leak_nodes = _day_network(scenario, day, tank_level, pump_open, requests, op)
