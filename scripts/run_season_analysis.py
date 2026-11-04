@@ -31,7 +31,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from irrigation_twin.catalog import SCENARIOS, save_result  # noqa: E402
-from irrigation_twin.farm import SEASON_END, SEASON_START, build_plots  # noqa: E402
+from irrigation_twin.farm import SEASON_END, SEASON_START, IrrigationPolicy, build_plots  # noqa: E402
 from irrigation_twin.farm.weather import ANANTAPUR, add_et0, load_weather, weather_csv_path  # noqa: E402
 from irrigation_twin.network.build import REQUIRED_PRESSURE  # noqa: E402
 from irrigation_twin.optimise import Candidate, _evaluate  # noqa: E402
@@ -234,8 +234,9 @@ def phase5(results: dict) -> pd.DataFrame:
         vals = by_plot[by_plot["plot"] == p].set_index("scenario").loc[names, "relative_yield"]
         axes[2].bar(x + (i - 1.5) * 0.2, vals * 100, 0.2, label=p, color=PLOT_COLORS[p])
     axes[2].set_ylabel("Relative yield (%)")
-    axes[2].set_ylim(0, 105)
-    axes[2].legend(fontsize=7, ncol=2)
+    axes[2].set_ylim(0, 125)
+    axes[2].set_yticks(range(0, 101, 20))
+    axes[2].legend(fontsize=7, ncol=4, loc="upper center")
     for ax in axes:
         ax.set_xticks(x, [n.replace("_", "\n") for n in names], fontsize=8)
         ax.grid(axis="y", alpha=0.3)
@@ -250,8 +251,9 @@ def phase5(results: dict) -> pd.DataFrame:
 # Optimiser (stretch)
 # ---------------------------------------------------------------------------
 
-GRID = [Candidate(t, 20.0, w, p) for t in (0.6, 0.8, 1.0) for w in (12, 18) for p in (False, True)]
-SAVING_SWEEP = [Candidate(t, 20.0, 12, False) for t in (0.6, 0.8, 1.0, 1.2)]
+CAP = IrrigationPolicy().max_application_mm
+GRID = [Candidate(t, CAP, w, p) for t in (0.6, 0.8, 1.0) for w in (12, 18) for p in (False, True)]
+SAVING_SWEEP = [Candidate(t, CAP, 12, False) for t in (0.6, 0.8, 1.0, 1.2)]
 
 
 def optimiser_outputs(grid: pd.DataFrame, sweep: pd.DataFrame) -> dict:
@@ -275,7 +277,7 @@ def optimiser_outputs(grid: pd.DataFrame, sweep: pd.DataFrame) -> dict:
         out / "water_saving_sweep_baseline.csv", index=False)
 
     fig, ax = plt.subplots(1, 2, figsize=(12, 4.2))
-    labels = [c.replace(", cap 20 mm", "").replace(" RAW", "") for c in grid["candidate"]]
+    labels = [c.replace(f", cap {CAP:.0f} mm", "").replace(" RAW", "") for c in grid["candidate"]]
     colors = ["tab:green" if i == 0 else ("tab:grey" if lbl != default["candidate"] else "tab:blue")
               for i, lbl in enumerate(grid["candidate"])]
     ax[0].barh(range(len(grid)), grid["mean_relative_yield"] * 100, color=colors)

@@ -109,7 +109,7 @@ def _evaluate(args) -> dict:
 
 
 def grid_search(scenario: Scenario, weather: pd.DataFrame, start: dt.date, end: dt.date,
-                triggers=(0.6, 0.8, 1.0), caps=(20.0,), windows=(12, 18), priority=(False, True),
+                triggers=(0.6, 0.8, 1.0), caps=(IrrigationPolicy().max_application_mm,), windows=(12, 18), priority=(False, True),
                 max_workers: int | None = None) -> pd.DataFrame:
     """Evaluate every combination; return them best first."""
     cands = [Candidate(t, c, w, p) for t, c, w, p in itertools.product(triggers, caps, windows, priority)]

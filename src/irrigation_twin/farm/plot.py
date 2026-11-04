@@ -36,14 +36,16 @@ class IrrigationPolicy:
         irrigate before the crop is stressed.
     max_application_mm:
         Most net water one plot can receive in a day. This is the irrigation
-        system's capacity. A larger deficit is refilled over several days.
+        system's capacity, sized at about 1.4 x peak crop water use (maize
+        ETc peaks near 8.5 mm/day here), a common design margin. A larger
+        deficit is refilled over several days.
     efficiency:
         Fraction of delivered water that reaches the root zone. Sprinkler
         losses such as wind drift and evaporation take the rest.
     """
 
     trigger_fraction: float = 0.8
-    max_application_mm: float = 20.0
+    max_application_mm: float = 12.0
     efficiency: float = 0.8
 
 

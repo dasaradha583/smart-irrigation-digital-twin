@@ -13,9 +13,12 @@ dependencies = [
     "pandas",
     "matplotlib",
     "networkx",
+    "scikit-learn",
 ]
 
 [project.optional-dependencies]
+dashboard = ["streamlit", "plotly"]
+
 dev = ["pytest"]
 
 [tool.setuptools.packages.find]

@@ -147,7 +147,7 @@ def main() -> None:
         ("Plot area", f"{PLOT_AREA_HA}", "ha", "Assumption"),
         ("Sowing dates", ", ".join(f"{k[-1]} {v['sowing']:%d %b}" for k, v in PLOT_LAYOUT.items()), "-", "Assumption; staggered sowing"),
         ("Irrigation trigger", f"{pol.trigger_fraction} × RAW", "-", "Assumption (optimised in §6)"),
-        ("Max net application", f"{pol.max_application_mm}", "mm/day", "Assumption; sprinkler capacity"),
+        ("Max net application", f"{pol.max_application_mm}", "mm/day", "Assumption; system sized at ~1.4 x peak ETc"),
         ("Application efficiency", f"{pol.efficiency:.0%}", "-", "Assumption; typical sprinkler"),
         ("Irrigation window", f"{op.window_start_hour:02d}:00-{op.window_start_hour + op.window_hours:02d}:00", "-", "Assumption"),
         ("Albedo", "0.23", "-", "FAO-56 (grass reference)"),
@@ -165,7 +165,7 @@ This project couples a water-distribution model (WNTR/EPANET, pressure-driven de
 
 Key results:
 
-- **The coupling works as designed.** In the pipe-burst scenario ({SCENARIOS['pipe_burst'].description.lower()}), {chain['plot'].replace('_', ' ')} received {f0(chain['delivered_m3'][1])} m³ against {f0(chain['delivered_m3'][0])} m³ in the baseline. Its mean soil moisture during the burst fell from {chain['mean_soil_moisture_during_leak'][0]:.3f} to {chain['mean_soil_moisture_during_leak'][1]:.3f} m³/m³, it had {chain['stress_days'][1]} stress days against {chain['stress_days'][0]}, and its relative yield moved from {pct(chain['relative_yield'][0])} to {pct(chain['relative_yield'][1])}.
+- **Coupling chain (pipe burst on P6, 5-19 Feb).** {chain['plot'].replace('_', ' ')} received {f0(chain['delivered_m3'][1])} m³ over the season against {f0(chain['delivered_m3'][0])} m³ in the baseline. Its mean soil moisture during the burst was {chain['mean_soil_moisture_during_leak'][1]:.3f} against {chain['mean_soil_moisture_during_leak'][0]:.3f} m³/m³, with {chain['stress_days'][1]} stress days against {chain['stress_days'][0]}, and relative yield {pct(chain['relative_yield'][1])} against {pct(chain['relative_yield'][0])}.
 - {leak_line}
 - **Detection pays.** With the leak found within hours (the detector's median delay) and repaired the next day, losses fall to {f0(lr['leak_m3'])} m³ and energy to {f0(lr['pump_energy_kwh'])} kWh.
 - **A 10-day pump failure at peak demand** caused {int(pf['stress_days_total'])} stress plot-days and a mean yield of {pct(pf['mean_relative_yield'])} (worst plot {pct(pf['min_relative_yield'])}).
