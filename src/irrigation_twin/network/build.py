@@ -84,6 +84,9 @@ PUMP = {
     "design_head": 25.0,
 }
 
+#: Wire-to-water pump efficiency, used only for the energy metric (EPANET default).
+PUMP_EFFICIENCY_PCT = 75.0
+
 #: Pump control: switch on below the low tank level, off above the high level.
 PUMP_ON_LEVEL = 2.0
 PUMP_OFF_LEVEL = 4.5
@@ -130,6 +133,7 @@ NETWORK_PARAMETERS: list[Parameter] = [
     Parameter("Sump water level (R1 head)", f"{RESERVOIR['base_head']}", "m", "Assumption"),
     Parameter("Pump design point", f"{PUMP['design_flow'] * 1000:.0f} L/s @ {PUMP['design_head']} m", "-",
               "Assumption; single-point curve"),
+    Parameter("Pump efficiency (energy metric)", f"{PUMP_EFFICIENCY_PCT:.0f}", "%", "EPANET default"),
     Parameter("Pump on / off tank level", f"{PUMP_ON_LEVEL} / {PUMP_OFF_LEVEL}", "m", "Assumption"),
     Parameter("Tank base elevation", f"{TANK['elevation']}", "m", "Assumption; tower tank"),
     Parameter("Tank diameter", f"{TANK['diameter']}", "m", "Assumption"),
@@ -186,6 +190,7 @@ def build_farm_network(demand_model: str = "PDD") -> wntr.network.WaterNetworkMo
     opts.hydraulic.required_pressure = REQUIRED_PRESSURE
     opts.hydraulic.minimum_pressure = MINIMUM_PRESSURE
     opts.hydraulic.pressure_exponent = PRESSURE_EXPONENT
+    opts.energy.global_efficiency = PUMP_EFFICIENCY_PCT
     return wn
 
 
