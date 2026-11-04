@@ -89,13 +89,14 @@ st.sidebar.caption("Anantapur, Andhra Pradesh · maize, Rabi 2023-24 · four 0.5
 # ---------------------------------------------------------------------------
 st.title(f"{label(scenario)}")
 s, r = data["meta"]["summary"], ref["meta"]["summary"]
-k = st.columns(6)
-k[0].metric("Water delivered", f"{s['delivered_m3']:,.0f} m³", f"{s['delivered_m3'] - r['delivered_m3']:+,.0f} vs {label(compare).lower()}")
-k[1].metric("Lost to leaks", f"{s['leak_m3']:,.0f} m³", f"{s['leak_m3'] - r['leak_m3']:+,.0f}", delta_color="inverse")
-k[2].metric("Pump energy", f"{s['pump_energy_kwh']:,.0f} kWh", f"{s['pump_energy_kwh'] - r['pump_energy_kwh']:+,.0f}", delta_color="inverse")
-k[3].metric("Crop stress", f"{s['stress_days_total']} plot-days", f"{s['stress_days_total'] - r['stress_days_total']:+d}", delta_color="inverse")
-k[4].metric("Mean relative yield", f"{100 * s['mean_relative_yield']:.1f} %", f"{100 * (s['mean_relative_yield'] - r['mean_relative_yield']):+.1f} pts")
-k[5].metric("Low-pressure days", f"{s['days_low_pressure']}", f"{s['days_low_pressure'] - r['days_low_pressure']:+d}", delta_color="inverse")
+vs = f"vs {label(compare).lower()}"
+k = st.columns(3) + st.columns(3)
+k[0].metric("Water delivered to plots", f"{s['delivered_m3']:,.0f} m³", f"{s['delivered_m3'] - r['delivered_m3']:+,.0f} {vs}")
+k[1].metric("Lost to leaks", f"{s['leak_m3']:,.0f} m³", f"{s['leak_m3'] - r['leak_m3']:+,.0f} {vs}", delta_color="inverse")
+k[2].metric("Pump energy", f"{s['pump_energy_kwh']:,.0f} kWh", f"{s['pump_energy_kwh'] - r['pump_energy_kwh']:+,.0f} {vs}", delta_color="inverse")
+k[3].metric("Crop stress (plot-days)", f"{s['stress_days_total']}", f"{s['stress_days_total'] - r['stress_days_total']:+d} {vs}", delta_color="inverse")
+k[4].metric("Mean relative yield", f"{100 * s['mean_relative_yield']:.1f} %", f"{100 * (s['mean_relative_yield'] - r['mean_relative_yield']):+.1f} pts {vs}")
+k[5].metric("Low-pressure days", f"{s['days_low_pressure']}", f"{s['days_low_pressure'] - r['days_low_pressure']:+d} {vs}", delta_color="inverse")
 
 tab_net, tab_plots, tab_water, tab_compare, tab_alerts, tab_stretch = st.tabs(
     ["Network", "Plots", "Water & network", "Scenario comparison", "Alerts", "Leak detection & optimiser"])
@@ -124,16 +125,22 @@ with tab_net:
                                  hoverinfo="text", text=f"{name}: {q:.2f} L/s", showlegend=False))
         fig.add_annotation(x=(x0 + x1) / 2, y=(y0 + y1) / 2, text=f"{name}<br>{q:.1f} L/s", showarrow=False,
                            font=dict(size=10, color="#555"), bgcolor="rgba(255,255,255,0.7)")
-    names = list(coords)
+    names = list(JUNCTIONS)
     pvals = [float(pressure[n]) if pressure is not None and n in pressure else float("nan") for n in names]
     fig.add_trace(go.Scatter(
         x=[coords[n][0] for n in names], y=[coords[n][1] for n in names], mode="markers+text",
         marker=dict(size=[26 if n in PLOT_JUNCTIONS.values() else 18 for n in names], color=pvals,
                     colorscale="RdYlGn", cmin=0, cmax=30, showscale=True,
-                    colorbar=dict(title="Pressure (m)<br>tank: level"), line=dict(width=1, color="#333"),
-                    symbol=["square" if n == "T1" else "diamond" if n == "R1" else "circle" for n in names]),
+                    colorbar=dict(title="Pressure (m)"), line=dict(width=1, color="#333")),
         text=names, textposition="top center", hoverinfo="text",
         hovertext=[f"{n}: {v:.1f} m" for n, v in zip(names, pvals)], showlegend=False))
+    # The reservoir and tank are drawn apart: their value is a water level, not a pressure.
+    level = float(pressure[TANK["name"]]) if pressure is not None else float("nan")
+    for n, sym, txt in [(RESERVOIR["name"], "diamond", "R1 sump"), (TANK["name"], "square", f"T1 tank<br>level {level:.2f} m")]:
+        fig.add_trace(go.Scatter(x=[coords[n][0]], y=[coords[n][1]], mode="markers+text", text=[txt],
+                                 textposition="bottom center", marker=dict(size=20, color="#9ecae1", symbol=sym,
+                                                                          line=dict(width=1, color="#333")),
+                                 hoverinfo="text", hovertext=[txt.replace("<br>", ", ")], showlegend=False))
     for plot, j in PLOT_JUNCTIONS.items():
         x, y = coords[j]
         rec = today_plots.loc[plot] if plot in today_plots.index else None

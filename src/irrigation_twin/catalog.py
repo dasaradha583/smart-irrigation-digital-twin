@@ -15,6 +15,8 @@ from .twin import LeakEvent, PumpOutage, Scenario, SeasonResult
 LEAK_START = dt.date(2024, 1, 25)
 LEAK = dict(pipe="P3", hole_diameter_m=0.04, start=LEAK_START, start_hour=6)
 OUTAGE = PumpOutage(dt.date(2024, 2, 1), dt.date(2024, 2, 10))
+BURST_START = dt.date(2024, 2, 5)
+BURST = LeakEvent("P6", 0.05, BURST_START, end=dt.date(2024, 2, 19), start_hour=6)
 
 SCENARIOS: dict[str, Scenario] = {
     "baseline": Scenario(
@@ -25,6 +27,10 @@ SCENARIOS: dict[str, Scenario] = {
     "leak_repaired": Scenario(
         "leak_repaired", "Same leak, caught by the detector within hours and repaired the next day.",
         leaks=(LeakEvent(**LEAK, end=LEAK_START + dt.timedelta(days=1)),)),
+    "pipe_burst": Scenario(
+        "pipe_burst", "5 cm break in pipe P6 (the only supply to Plot D) on 5 Feb, 06:00. Not found "
+                      "until the crop wilts; repaired on 19 Feb.",
+        leaks=(BURST,)),
     "pump_failure": Scenario(
         "pump_failure", "Pump out of service 1-10 Feb while waiting for a spare part.",
         outages=(OUTAGE,)),

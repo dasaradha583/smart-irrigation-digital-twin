@@ -150,28 +150,39 @@ def _run_scenario(args):
     return name, res
 
 
-def phase4_chain(results: dict, out: Path) -> dict:
+def phase4_chain(results: dict, out: Path, leak_name: str = "pipe_burst") -> dict:
     """Show the chain leak -> low pressure -> less water -> drier soil for the plot it hits hardest."""
-    out.mkdir(parents=True, exist_ok=True)
-    base, leak = results["baseline"], results["leak"]
-    worst = (base.plot_summary()["eta_mm"] - leak.plot_summary()["eta_mm"]).idxmax()
-    junction = base.plots.loc[base.plots["plot"] == worst].iloc[0]
+    from irrigation_twin.catalog import SCENARIOS as S
     from irrigation_twin.network.build import PLOT_JUNCTIONS
+
+    out.mkdir(parents=True, exist_ok=True)
+    base, leak = results["baseline"], results[leak_name]
+    ev = S[leak_name].leaks[0]
+    start = pd.Timestamp(ev.start)
+    stop = pd.Timestamp(ev.end) if ev.end else pd.Timestamp(SEASON_END)
+
+    def mean_sm(res):
+        d = res.plots.assign(date=pd.to_datetime(res.plots["date"]))
+        d = d[(d["date"] >= start) & (d["date"] <= stop + pd.Timedelta(days=7))]
+        return d.groupby("plot")["soil_moisture"].mean()
+
+    worst = (mean_sm(base) - mean_sm(leak)).idxmax()
     j = PLOT_JUNCTIONS[worst]
-    lo, hi = pd.Timestamp("2024-01-10"), pd.Timestamp("2024-03-10")
+    lo, hi = start - pd.Timedelta(days=12), stop + pd.Timedelta(days=21)
+    leak_label = f"{leak_name.replace('_', ' ')} ({ev.pipe}, {ev.hole_diameter_m * 100:.0f} cm)"
 
     fig, axes = plt.subplots(4, 1, figsize=(10, 10), sharex=True)
-    for res, label, color in [(base, "baseline", "tab:blue"), (leak, "leak (P3, 4 cm, from 25 Jan)", "tab:orange")]:
+    for res, lbl, color in [(base, "baseline", "tab:blue"), (leak, leak_label, "tab:orange")]:
         p = res.pressure[j]
         p = p[(p.index >= lo) & (p.index < hi)]
-        axes[0].plot(p.index, p.values, color=color, lw=0.8, label=label)
+        axes[0].plot(p.index, p.values, color=color, lw=0.8, label=lbl)
         d = res.plots[res.plots["plot"] == worst].copy()
         d["date"] = pd.to_datetime(d["date"])
         d = d[(d["date"] >= lo) & (d["date"] < hi)]
-        axes[1].bar(d["date"] + (pd.Timedelta(hours=-5) if color == "tab:blue" else pd.Timedelta(hours=5)),
-                    d["delivered_m3"], width=0.4, color=color, label=label)
-        axes[2].plot(d["date"], d["soil_moisture"], color=color, label=label)
-        axes[3].plot(d["date"], d["ks"], color=color, label=label)
+        shift = pd.Timedelta(hours=-5) if color == "tab:blue" else pd.Timedelta(hours=5)
+        axes[1].bar(d["date"] + shift, d["delivered_m3"], width=0.4, color=color, label=lbl)
+        axes[2].plot(d["date"], d["soil_moisture"], color=color, label=lbl)
+        axes[3].plot(d["date"], d["ks"], color=color, label=lbl)
     axes[0].axhline(REQUIRED_PRESSURE, color="grey", ls="--", lw=1)
     axes[0].set_ylabel(f"Pressure at {j} (m)")
     axes[1].set_ylabel("Water delivered (m³/day)")
@@ -179,15 +190,18 @@ def phase4_chain(results: dict, out: Path) -> dict:
     axes[3].set_ylabel("Water stress Ks")
     axes[3].set_ylim(0, 1.05)
     for ax in axes:
-        ax.axvline(pd.Timestamp("2024-01-25 06:00"), color="red", lw=1, alpha=0.6)
+        ax.axvspan(start + pd.Timedelta(hours=ev.start_hour), stop + pd.Timedelta(days=1), color="red", alpha=0.07)
         ax.grid(alpha=0.3)
     axes[0].legend(fontsize=8, loc="lower left")
-    fig.suptitle(f"Coupling chain for {worst}: leak → low pressure → less water → drier soil → stress")
+    fig.suptitle(f"Coupling chain for {worst}: leak → low pressure → less water → drier soil → stress\n"
+                 "(shaded: leak open)")
     fig.tight_layout()
     fig.savefig(out / "leak_chain.png", dpi=150)
     plt.close(fig)
     bs, ls = base.plot_summary().loc[worst], leak.plot_summary().loc[worst]
-    return {"plot": worst, "junction": j,
+    sm = (mean_sm(base)[worst], mean_sm(leak)[worst])
+    return {"scenario": leak_name, "plot": worst, "junction": j,
+            "mean_soil_moisture_during_leak": [float(sm[0]), float(sm[1])],
             "delivered_m3": [float(bs["delivered_m3"]), float(ls["delivered_m3"])],
             "stress_days": [int(bs["stress_days"]), int(ls["stress_days"])],
             "relative_yield": [float(bs["relative_yield"]), float(ls["relative_yield"])]}
