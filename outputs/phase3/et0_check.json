@@ -1,0 +1,11 @@
+{
+  "days": 171,
+  "et0_mean_mm": 5.933401241001579,
+  "et0_openmeteo_mean_mm": 5.9617543859649125,
+  "et0_hargreaves_mean_mm": 4.9135347063232135,
+  "bias_vs_openmeteo_mm": -0.02835314496333349,
+  "rmse_vs_openmeteo_mm": 0.20161375468665943,
+  "r_vs_openmeteo": 0.9930893578217207,
+  "season_rain_mm": 84.0,
+  "season_et0_mm": 1014.61161221127
+}

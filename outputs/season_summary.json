@@ -1,0 +1,259 @@
+{
+  "phase3": {
+    "days": 171,
+    "et0_mean_mm": 5.933401241001579,
+    "et0_openmeteo_mean_mm": 5.9617543859649125,
+    "et0_hargreaves_mean_mm": 4.9135347063232135,
+    "bias_vs_openmeteo_mm": -0.02835314496333349,
+    "rmse_vs_openmeteo_mm": 0.20161375468665943,
+    "r_vs_openmeteo": 0.9930893578217207,
+    "season_rain_mm": 84.0,
+    "season_et0_mm": 1014.61161221127,
+    "farm_only": [
+      {
+        "plot": "Plot_A",
+        "irrigation_events": 55,
+        "gross_irrigation_m3": 4125.0,
+        "rain_mm": 84.0,
+        "etc_mm": 754.4,
+        "eta_mm": 754.4,
+        "stress_days": 0
+      },
+      {
+        "plot": "Plot_B",
+        "irrigation_events": 59,
+        "gross_irrigation_m3": 4425.0,
+        "rain_mm": 38.6,
+        "etc_mm": 786.3,
+        "eta_mm": 786.3,
+        "stress_days": 0
+      },
+      {
+        "plot": "Plot_C",
+        "irrigation_events": 61,
+        "gross_irrigation_m3": 4575.0,
+        "rain_mm": 25.3,
+        "etc_mm": 818.5,
+        "eta_mm": 818.5,
+        "stress_days": 0
+      },
+      {
+        "plot": "Plot_D",
+        "irrigation_events": 66,
+        "gross_irrigation_m3": 4950.0,
+        "rain_mm": 24.5,
+        "etc_mm": 848.4,
+        "eta_mm": 848.4,
+        "stress_days": 0
+      }
+    ],
+    "kc_mid_adjusted": {
+      "Plot_A": 1.29,
+      "Plot_B": 1.295,
+      "Plot_C": 1.297,
+      "Plot_D": 1.296
+    }
+  },
+  "phase4_chain": {
+    "scenario": "pipe_burst",
+    "plot": "Plot_D",
+    "junction": "J7",
+    "mean_soil_moisture_during_leak": [
+      0.1293171317309652,
+      0.11156013932167398
+    ],
+    "delivered_m3": [
+      4950.000000259538,
+      4758.347334694688
+    ],
+    "stress_days": [
+      0,
+      14
+    ],
+    "relative_yield": [
+      1.0,
+      0.9637864025877321
+    ]
+  },
+  "phase5": [
+    {
+      "scenario": "baseline",
+      "requested_m3": 18075.0,
+      "delivered_m3": 18075.0,
+      "delivered_pct": 100.0,
+      "pumped_m3": 18085.049,
+      "leak_m3": 0.0,
+      "pump_energy_kwh": 1739.542,
+      "stress_days_total": 0,
+      "mean_relative_yield": 1.0,
+      "min_relative_yield": 1.0,
+      "days_low_pressure": 0
+    },
+    {
+      "scenario": "leak",
+      "requested_m3": 19350.0,
+      "delivered_m3": 18061.982,
+      "delivered_pct": 93.344,
+      "pumped_m3": 122583.072,
+      "leak_m3": 104559.032,
+      "pump_energy_kwh": 10603.969,
+      "stress_days_total": 0,
+      "mean_relative_yield": 1.0,
+      "min_relative_yield": 1.0,
+      "days_low_pressure": 77
+    },
+    {
+      "scenario": "leak_repaired",
+      "requested_m3": 18075.0,
+      "delivered_m3": 18033.503,
+      "delivered_pct": 99.77,
+      "pumped_m3": 20168.531,
+      "leak_m3": 2110.357,
+      "pump_energy_kwh": 1914.591,
+      "stress_days_total": 0,
+      "mean_relative_yield": 1.0,
+      "min_relative_yield": 1.0,
+      "days_low_pressure": 2
+    },
+    {
+      "scenario": "pipe_burst",
+      "requested_m3": 18675.0,
+      "delivered_m3": 17844.59,
+      "delivered_pct": 95.553,
+      "pumped_m3": 36577.564,
+      "leak_m3": 18698.699,
+      "pump_energy_kwh": 3199.194,
+      "stress_days_total": 14,
+      "mean_relative_yield": 0.991,
+      "min_relative_yield": 0.964,
+      "days_low_pressure": 15
+    },
+    {
+      "scenario": "pump_failure",
+      "requested_m3": 19650.0,
+      "delivered_m3": 17097.813,
+      "delivered_pct": 87.012,
+      "pumped_m3": 17129.545,
+      "leak_m3": 0.0,
+      "pump_energy_kwh": 1646.739,
+      "stress_days_total": 58,
+      "mean_relative_yield": 0.933,
+      "min_relative_yield": 0.926,
+      "days_low_pressure": 10
+    },
+    {
+      "scenario": "drought",
+      "requested_m3": 20850.0,
+      "delivered_m3": 20850.0,
+      "delivered_pct": 100.0,
+      "pumped_m3": 20882.349,
+      "leak_m3": 0.0,
+      "pump_energy_kwh": 2381.762,
+      "stress_days_total": 0,
+      "mean_relative_yield": 1.0,
+      "min_relative_yield": 1.0,
+      "days_low_pressure": 0
+    },
+    {
+      "scenario": "drought_pump_failure",
+      "requested_m3": 22125.0,
+      "delivered_m3": 19463.125,
+      "delivered_pct": 87.969,
+      "pumped_m3": 19495.828,
+      "leak_m3": 0.0,
+      "pump_energy_kwh": 2224.116,
+      "stress_days_total": 64,
+      "mean_relative_yield": 0.923,
+      "min_relative_yield": 0.918,
+      "days_low_pressure": 10
+    }
+  ],
+  "optimiser": {
+    "best": {
+      "candidate": "trigger 0.6 RAW, cap 12 mm, 18 h window, independent",
+      "trigger_fraction": 0.6,
+      "window_hours": 18,
+      "priority": false,
+      "delivered_m3": 20063.33333463999,
+      "pumped_m3": 20099.836258949923,
+      "pump_energy_kwh": 2320.8414410810883,
+      "stress_days_total": 59,
+      "mean_relative_yield": 0.9376398123573232,
+      "min_relative_yield": 0.9309210731097451
+    },
+    "default": {
+      "candidate": "trigger 0.8 RAW, cap 12 mm, 12 h window, independent",
+      "trigger_fraction": 0.8,
+      "window_hours": 12,
+      "priority": false,
+      "delivered_m3": 19463.125001135046,
+      "pumped_m3": 19495.8281978328,
+      "pump_energy_kwh": 2224.1157980049934,
+      "stress_days_total": 64,
+      "mean_relative_yield": 0.9225451478350611,
+      "min_relative_yield": 0.9180657406530421
+    },
+    "water_saving_sweep": [
+      {
+        "candidate": "trigger 0.6 RAW, cap 12 mm, 12 h window, independent",
+        "trigger_fraction": 0.6,
+        "window_hours": 12,
+        "priority": false,
+        "delivered_m3": 18450.0,
+        "pumped_m3": 18480.871,
+        "pump_energy_kwh": 1777.641,
+        "stress_days_total": 0,
+        "mean_relative_yield": 1.0,
+        "min_relative_yield": 1.0,
+        "water_saved_m3": -375.0,
+        "water_saved_pct": -2.0747,
+        "yield_change_pct": 0.0
+      },
+      {
+        "candidate": "trigger 0.8 RAW, cap 12 mm, 12 h window, independent",
+        "trigger_fraction": 0.8,
+        "window_hours": 12,
+        "priority": false,
+        "delivered_m3": 18075.0,
+        "pumped_m3": 18085.0485,
+        "pump_energy_kwh": 1739.5418,
+        "stress_days_total": 0,
+        "mean_relative_yield": 1.0,
+        "min_relative_yield": 1.0,
+        "water_saved_m3": 0.0,
+        "water_saved_pct": 0.0,
+        "yield_change_pct": 0.0
+      },
+      {
+        "candidate": "trigger 1.0 RAW, cap 12 mm, 12 h window, independent",
+        "trigger_fraction": 1.0,
+        "window_hours": 12,
+        "priority": false,
+        "delivered_m3": 17700.0,
+        "pumped_m3": 17723.6592,
+        "pump_energy_kwh": 1704.4147,
+        "stress_days_total": 29,
+        "mean_relative_yield": 0.9975,
+        "min_relative_yield": 0.9958,
+        "water_saved_m3": 375.0,
+        "water_saved_pct": 2.0747,
+        "yield_change_pct": -0.2531
+      },
+      {
+        "candidate": "trigger 1.2 RAW, cap 12 mm, 12 h window, independent",
+        "trigger_fraction": 1.2,
+        "window_hours": 12,
+        "priority": false,
+        "delivered_m3": 15975.0,
+        "pumped_m3": 15996.5348,
+        "pump_energy_kwh": 1538.5434,
+        "stress_days_total": 320,
+        "mean_relative_yield": 0.9158,
+        "min_relative_yield": 0.9021,
+        "water_saved_m3": 2100.0,
+        "water_saved_pct": 11.6183,
+        "yield_change_pct": -8.4244
+      }
+    ]
+  }
+}

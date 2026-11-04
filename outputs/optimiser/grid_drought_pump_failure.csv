@@ -1,0 +1,13 @@
+candidate,trigger_fraction,window_hours,priority,delivered_m3,pumped_m3,pump_energy_kwh,stress_days_total,mean_relative_yield,min_relative_yield
+"trigger 0.6 RAW, cap 12 mm, 18 h window, independent",0.6,18,False,20063.3333,20099.8363,2320.8414,59,0.9376,0.9309
+"trigger 0.6 RAW, cap 12 mm, 12 h window, independent",0.6,12,False,20063.3333,20096.5544,2291.8499,59,0.9376,0.9309
+"trigger 0.6 RAW, cap 12 mm, 12 h window, priority",0.6,12,True,20063.0847,20096.4521,2292.0325,58,0.9376,0.934
+"trigger 0.6 RAW, cap 12 mm, 18 h window, priority",0.6,18,True,20063.084,20099.2696,2320.2492,58,0.9376,0.934
+"trigger 0.8 RAW, cap 12 mm, 12 h window, independent",0.8,12,False,19463.125,19495.8282,2224.1158,64,0.9225,0.9181
+"trigger 0.8 RAW, cap 12 mm, 12 h window, priority",0.8,12,True,19463.0835,19495.7904,2224.1594,63,0.9225,0.9181
+"trigger 0.8 RAW, cap 12 mm, 18 h window, independent",0.8,18,False,19410.2778,19421.6041,2241.7094,65,0.9199,0.9162
+"trigger 0.8 RAW, cap 12 mm, 18 h window, priority",0.8,18,True,19410.2186,19422.1504,2242.0778,65,0.9198,0.9166
+"trigger 1.0 RAW, cap 12 mm, 18 h window, independent",1.0,18,False,18788.125,18825.037,2173.4401,100,0.9087,0.9032
+"trigger 1.0 RAW, cap 12 mm, 12 h window, independent",1.0,12,False,18788.125,18822.6736,2145.7815,100,0.9087,0.9032
+"trigger 1.0 RAW, cap 12 mm, 18 h window, priority",1.0,18,True,18788.0956,18825.4446,2173.5015,100,0.9087,0.9003
+"trigger 1.0 RAW, cap 12 mm, 12 h window, priority",1.0,12,True,18788.0942,18822.7149,2145.6892,100,0.9087,0.9003

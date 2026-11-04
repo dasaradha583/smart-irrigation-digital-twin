@@ -1,0 +1,20 @@
+{
+  "scenario": "pipe_burst",
+  "description": "5 cm break in pipe P6 (the only supply to Plot D) on 5 Feb, 06:00. Not found until the crop wilts; repaired on 19 Feb.",
+  "summary": {
+    "requested_m3": 18675.0,
+    "delivered_m3": 17844.590051415467,
+    "delivered_pct": 95.55336038241214,
+    "pumped_m3": 36577.56409587159,
+    "leak_m3": 18698.69906278817,
+    "pump_energy_kwh": 3199.193921135388,
+    "stress_days_total": 14,
+    "mean_relative_yield": 0.990946600646933,
+    "min_relative_yield": 0.9637864025877321,
+    "days_low_pressure": 15
+  },
+  "ky": "1.25",
+  "operation": "{'window_start_hour': 6, 'window_hours': 12}",
+  "start": "2023-11-01",
+  "end": "2024-04-19"
+}

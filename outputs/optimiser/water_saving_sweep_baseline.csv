@@ -1,0 +1,5 @@
+candidate,trigger_fraction,window_hours,priority,delivered_m3,pumped_m3,pump_energy_kwh,stress_days_total,mean_relative_yield,min_relative_yield,water_saved_m3,water_saved_pct,yield_change_pct
+"trigger 0.6 RAW, cap 12 mm, 12 h window, independent",0.6,12,False,18450.0,18480.871,1777.641,0,1.0,1.0,-375.0,-2.0747,0.0
+"trigger 0.8 RAW, cap 12 mm, 12 h window, independent",0.8,12,False,18075.0,18085.0485,1739.5418,0,1.0,1.0,0.0,0.0,0.0
+"trigger 1.0 RAW, cap 12 mm, 12 h window, independent",1.0,12,False,17700.0,17723.6592,1704.4147,29,0.9975,0.9958,375.0,2.0747,-0.2531
+"trigger 1.2 RAW, cap 12 mm, 12 h window, independent",1.2,12,False,15975.0,15996.5348,1538.5434,320,0.9158,0.9021,2100.0,11.6183,-8.4244

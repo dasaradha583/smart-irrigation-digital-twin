@@ -1,0 +1,20 @@
+{
+  "scenario": "leak",
+  "description": "4 cm hole in pipe P3 from 25 Jan, 06:00, never found or repaired.",
+  "summary": {
+    "requested_m3": 19350.0,
+    "delivered_m3": 18061.98220626695,
+    "delivered_pct": 93.34357729336924,
+    "pumped_m3": 122583.07175529709,
+    "leak_m3": 104559.03200073494,
+    "pump_energy_kwh": 10603.969076859641,
+    "stress_days_total": 0,
+    "mean_relative_yield": 1.0,
+    "min_relative_yield": 1.0,
+    "days_low_pressure": 77
+  },
+  "ky": "1.25",
+  "operation": "{'window_start_hour': 6, 'window_hours': 12}",
+  "start": "2023-11-01",
+  "end": "2024-04-19"
+}
