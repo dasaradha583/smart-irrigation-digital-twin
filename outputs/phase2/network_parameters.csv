@@ -5,6 +5,7 @@ Pipe lengths,100-300,m,Assumption; plot layout on a ~1 km x 0.3 km farm
 Junction elevations,10.0-12.5,m,Assumption; nearly flat farm
 Sump water level (R1 head),8.0,m,Assumption
 Pump design point,15 L/s @ 25.0 m,-,Assumption; single-point curve
+Pump efficiency (energy metric),75,%,EPANET default
 Pump on / off tank level,2.0 / 4.5,m,Assumption
 Tank base elevation,30.0,m,Assumption; tower tank
 Tank diameter,6.0,m,Assumption
