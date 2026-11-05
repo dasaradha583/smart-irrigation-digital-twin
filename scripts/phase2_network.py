@@ -33,6 +33,7 @@ from irrigation_twin.network import (  # noqa: E402
     set_irrigation_demands,
 )
 from irrigation_twin.network.build import REQUIRED_PRESSURE  # noqa: E402
+from irrigation_twin.network.topology import plot_supply_table  # noqa: E402
 
 OUT = ROOT / "outputs" / "phase2"
 
@@ -90,6 +91,32 @@ def plot_scenarios(runs: dict, path: Path) -> None:
     plt.close(fig)
 
 
+def standard_network_check() -> pd.DataFrame:
+    """Run EPANET's Net1 and Net3 with the EPANET engine and with WNTRSimulator; compare."""
+    import os
+    import tempfile
+
+    rows = []
+    folder = os.path.join(os.path.dirname(wntr.__file__), "library", "networks")
+    with tempfile.TemporaryDirectory() as tmp:
+        for net in ("Net1", "Net3"):
+            path = os.path.join(folder, f"{net}.inp")
+            e = wntr.sim.EpanetSimulator(wntr.network.WaterNetworkModel(path)).run_sim(
+                file_prefix=os.path.join(tmp, net))
+            wn = wntr.network.WaterNetworkModel(path)
+            w = wntr.sim.WNTRSimulator(wn).run_sim()
+            c = e.node["pressure"].index.intersection(w.node["pressure"].index)
+            j = wn.junction_name_list
+            dp = (e.node["pressure"].loc[c, j] - w.node["pressure"].loc[c, j]).abs()
+            dq = (e.link["flowrate"].loc[c] - w.link["flowrate"].loc[c]).abs() * 1000
+            rows.append({"network": net, "junctions": len(j), "links": wn.num_links,
+                         "hours": int(c[-1] // 3600), "time_steps_compared": len(c),
+                         "max_pressure_diff_m": round(float(dp.max().max()), 5),
+                         "mean_pressure_diff_m": round(float(dp.mean().mean()), 6),
+                         "max_flow_diff_Lps": round(float(dq.max().max()), 4)})
+    return pd.DataFrame(rows)
+
+
 def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
 
@@ -133,12 +160,22 @@ def main() -> None:
 
     pd.DataFrame([p.__dict__ for p in NETWORK_PARAMETERS]).to_csv(OUT / "network_parameters.csv", index=False)
 
+    # NetworkX: which pipes each plot depends on
+    routes = plot_supply_table(wn)
+    routes.to_csv(OUT / "plot_supply_routes.csv")
+
+    # Validation check 1 on standard EPANET example networks
+    check = standard_network_check()
+    check.to_csv(OUT / "standard_network_check.csv", index=False)
+
     plot_network(wn, OUT / "network.png")
     plot_scenarios(runs, OUT / "scenarios.png")
 
     with pd.option_context("display.width", 160, "display.max_columns", 20):
         print("Scenario summary\n", scenarios.T, "\n")
         print(f"Leak size sweep on {LEAK.pipe}\n", sweep_df, "\n")
+        print("Supply routes (NetworkX)\n", routes, "\n")
+        print("Standard EPANET networks, WNTRSimulator vs EPANET engine\n", check.to_string(index=False), "\n")
         print("Baseline mass-balance residual (max, m^3/s):",
               f"{base.mass_balance()['residual'].abs().max():.2e}")
     print(f"Outputs written to {OUT.relative_to(ROOT)}/")

@@ -9,6 +9,8 @@
     "leak_m3": 2110.357134828784,
     "pump_energy_kwh": 1914.5911454369198,
     "stress_days_total": 0,
+    "mean_soil_moisture": 0.1820257105496901,
+    "min_soil_moisture": 0.10563400562472963,
     "mean_relative_yield": 1.0,
     "min_relative_yield": 1.0,
     "days_low_pressure": 2

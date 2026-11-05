@@ -1,6 +1,6 @@
 # Smart Irrigation Digital Twin: Final report
 
-*Generated 04 Nov 2026 by `scripts/build_report.py` from the files in `outputs/`.*
+*Generated 05 Nov 2026 by `scripts/build_report.py` from the files in `outputs/`.*
 
 ## 1. Summary
 
@@ -23,6 +23,17 @@ Key results:
 | Farm | Four 0.5 ha maize plots on junctions J3, J4, J6, J7, with staggered sowing (1-22 Nov 2023) and sandy loam, loam and loamy sand soils. Details in [phase1_scope.md](phase1_scope.md) |
 | Weather | Open-Meteo historical archive for 14.68° N, 77.60° E, downloaded once to `data/weather/` |
 | Dashboard | `streamlit run app/dashboard.py` |
+
+**Which pipes each plot depends on** (NetworkX graph of the network, `src/irrigation_twin/network/topology.py`). A *critical* pipe is one whose failure alone cuts the plot off from both the pump and the tank:
+
+| Plot | Junction | Pipe routes from hub J2 | Critical pipes | Shortest route (m) |
+|---|---|---|---|---|
+| Plot_A | J3 | 2 | none | 300.0 |
+| Plot_B | J4 | 2 | P3 | 600.0 |
+| Plot_C | J6 | 2 | none | 600.0 |
+| Plot_D | J7 | 2 | P6 | 900.0 |
+
+This explains the scenario results. A break on P6 starves Plot D, which has no other feed. The loop through P7 gives Plots A and C a second route.
 
 ## 3. Farm model (phase 3)
 
@@ -73,15 +84,15 @@ The chain the project set out to show, leak → low pressure → less water → 
 | drought | Failed rains (rain x 0), 10 % higher evaporative demand, and the well water level 6 m lower. |
 | drought pump failure | Drought plus the 1-10 Feb pump outage: the limited-supply case for the schedule optimiser. |
 
-| Scenario | Delivered to plots (m³) | Lost to leaks (m³) | Pumped (m³) | Pump energy (kWh) | Stress (plot-days) | Low-pressure days | Mean yield | Worst plot |
-|---|---|---|---|---|---|---|---|---|
-| baseline | 18,075 | 0 | 18,085 | 1,740 | 0 | 0 | 100.0 % | 100.0 % |
-| leak | 18,062 | 104,559 | 122,583 | 10,604 | 0 | 77 | 100.0 % | 100.0 % |
-| leak repaired | 18,034 | 2,110 | 20,169 | 1,915 | 0 | 2 | 100.0 % | 100.0 % |
-| pipe burst | 17,845 | 18,699 | 36,578 | 3,199 | 14 | 15 | 99.1 % | 96.4 % |
-| pump failure | 17,098 | 0 | 17,130 | 1,647 | 58 | 10 | 93.3 % | 92.6 % |
-| drought | 20,850 | 0 | 20,882 | 2,382 | 0 | 0 | 100.0 % | 100.0 % |
-| drought pump failure | 19,463 | 0 | 19,496 | 2,224 | 64 | 10 | 92.3 % | 91.8 % |
+| Scenario | Delivered to plots (m³) | Lost to leaks (m³) | Pumped (m³) | Pump energy (kWh) | Mean soil moisture (m³/m³) | Lowest soil moisture (m³/m³) | Stress (plot-days) | Low-pressure days | Mean yield | Worst plot |
+|---|---|---|---|---|---|---|---|---|---|---|
+| baseline | 18,075 | 0 | 18,085 | 1,740 | 0.182 | 0.106 | 0 | 0 | 100.0 % | 100.0 % |
+| leak | 18,062 | 104,559 | 122,583 | 10,604 | 0.181 | 0.106 | 0 | 77 | 100.0 % | 100.0 % |
+| leak repaired | 18,034 | 2,110 | 20,169 | 1,915 | 0.182 | 0.106 | 0 | 2 | 100.0 % | 100.0 % |
+| pipe burst | 17,845 | 18,699 | 36,578 | 3,199 | 0.181 | 0.101 | 14 | 15 | 99.1 % | 96.4 % |
+| pump failure | 17,098 | 0 | 17,130 | 1,647 | 0.178 | 0.076 | 58 | 10 | 93.3 % | 92.6 % |
+| drought | 20,850 | 0 | 20,882 | 2,382 | 0.178 | 0.103 | 0 | 0 | 100.0 % | 100.0 % |
+| drought pump failure | 19,463 | 0 | 19,496 | 2,224 | 0.173 | 0.076 | 64 | 10 | 92.3 % | 91.8 % |
 
 Relative yield by plot (FAO-33, Ky = 1.25):
 
@@ -151,7 +162,8 @@ The lowest-water trigger that keeps mean yield within 0.5 points of the default 
 
 | Check (validation plan) | Result |
 |---|---|
-| 1. Hydraulics against EPANET | WNTR pressures agree with the EPANET engine within 0.001 m over a full day (`tests/test_network.py`) |
+| 1. Standard example networks | EPANET's own example networks, run with the twin's solver and with the EPANET engine: Net1 (9 junctions, 24 h) max pressure difference 0.0001 m, max flow difference 0.000 L/s; Net3 (92 junctions, 168 h) max pressure difference 0.0004 m, max flow difference 0.030 L/s (`outputs/phase2/standard_network_check.csv`) |
+| 1. Our network against EPANET | WNTR pressures agree with the EPANET engine within 0.001 m over a full day (`tests/test_network.py`) |
 | 1. Mass balance | Largest daily residual across all 7 season runs: 4.3e-18 m³/s |
 | 2. ET0 against references | FAO-56 Examples 2, 3, 8, 10 and 18 reproduced. Season RMSE against Open-Meteo ET0 is 0.20 mm/day |
 | 2. Soil balance closure | Closes to 1e-9 mm every day (`tests/test_farm.py`) |

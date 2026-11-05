@@ -1,0 +1,5 @@
+plot,junction,routes_from_hub,critical_pipes,shortest_route_m
+Plot_A,J3,2,none,300.0
+Plot_B,J4,2,P3,600.0
+Plot_C,J6,2,none,600.0
+Plot_D,J7,2,P6,900.0

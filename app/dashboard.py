@@ -158,6 +158,13 @@ with tab_net:
     c[2].metric("Leak today", f"{row['leak_m3']:.0f} m³")
     c[3].metric("Tank start → end", f"{row['tank_start_m']:.2f} → {row['tank_end_m']:.2f} m")
     c[4].metric("Pump running", f"{row['pump_hours']:.1f} h" + (" (outage)" if row["pump_outage"] else ""))
+    routes_csv = OUTPUTS / "phase2" / "plot_supply_routes.csv"
+    if routes_csv.exists():
+        st.caption("Which pipes each plot depends on (NetworkX). A critical pipe's failure alone cuts the plot off.")
+        st.dataframe(pd.read_csv(routes_csv).rename(columns={
+            "plot": "Plot", "junction": "Junction", "routes_from_hub": "Routes from hub J2",
+            "critical_pipes": "Critical pipes", "shortest_route_m": "Shortest route (m)"}),
+            use_container_width=True, hide_index=True)
 
 # ---------------------------------------------------------------------------
 # Plots
@@ -232,10 +239,14 @@ with tab_compare:
         m = load(name)["meta"]["summary"]
         rows.append({"Scenario": label(name), "Delivered (m³)": m["delivered_m3"], "Leaked (m³)": m["leak_m3"],
                      "Pumped (m³)": m["pumped_m3"], "Energy (kWh)": m["pump_energy_kwh"],
+                     "Mean soil moisture (m³/m³)": m.get("mean_soil_moisture", float("nan")),
+                     "Lowest soil moisture (m³/m³)": m.get("min_soil_moisture", float("nan")),
                      "Stress plot-days": m["stress_days_total"], "Mean yield (%)": 100 * m["mean_relative_yield"],
                      "Worst plot yield (%)": 100 * m["min_relative_yield"], "Low-pressure days": m["days_low_pressure"]})
     table = pd.DataFrame(rows).set_index("Scenario")
-    st.dataframe(table.style.format("{:,.1f}"), use_container_width=True)
+    fmt = {c: "{:,.1f}" for c in table.columns}
+    fmt.update({c: "{:.3f}" for c in table.columns if "soil moisture" in c})
+    st.dataframe(table.style.format(fmt), use_container_width=True)
     by_plot = []
     for name in scenarios:
         d = load(name)["plots"]

@@ -7,8 +7,10 @@
     "delivered_pct": 100.00000000610437,
     "pumped_m3": 18085.04853440254,
     "leak_m3": 0.0,
-    "pump_energy_kwh": 1739.5417614515877,
+    "pump_energy_kwh": 1739.541761451588,
     "stress_days_total": 0,
+    "mean_soil_moisture": 0.18191406590684894,
+    "min_soil_moisture": 0.10563400562472963,
     "mean_relative_yield": 1.0,
     "min_relative_yield": 1.0,
     "days_low_pressure": 0

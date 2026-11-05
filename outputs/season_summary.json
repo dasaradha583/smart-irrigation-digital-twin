@@ -85,6 +85,8 @@
       "leak_m3": 0.0,
       "pump_energy_kwh": 1739.542,
       "stress_days_total": 0,
+      "mean_soil_moisture": 0.182,
+      "min_soil_moisture": 0.106,
       "mean_relative_yield": 1.0,
       "min_relative_yield": 1.0,
       "days_low_pressure": 0
@@ -98,6 +100,8 @@
       "leak_m3": 104559.032,
       "pump_energy_kwh": 10603.969,
       "stress_days_total": 0,
+      "mean_soil_moisture": 0.181,
+      "min_soil_moisture": 0.106,
       "mean_relative_yield": 1.0,
       "min_relative_yield": 1.0,
       "days_low_pressure": 77
@@ -111,6 +115,8 @@
       "leak_m3": 2110.357,
       "pump_energy_kwh": 1914.591,
       "stress_days_total": 0,
+      "mean_soil_moisture": 0.182,
+      "min_soil_moisture": 0.106,
       "mean_relative_yield": 1.0,
       "min_relative_yield": 1.0,
       "days_low_pressure": 2
@@ -124,6 +130,8 @@
       "leak_m3": 18698.699,
       "pump_energy_kwh": 3199.194,
       "stress_days_total": 14,
+      "mean_soil_moisture": 0.181,
+      "min_soil_moisture": 0.101,
       "mean_relative_yield": 0.991,
       "min_relative_yield": 0.964,
       "days_low_pressure": 15
@@ -137,6 +145,8 @@
       "leak_m3": 0.0,
       "pump_energy_kwh": 1646.739,
       "stress_days_total": 58,
+      "mean_soil_moisture": 0.178,
+      "min_soil_moisture": 0.076,
       "mean_relative_yield": 0.933,
       "min_relative_yield": 0.926,
       "days_low_pressure": 10
@@ -150,6 +160,8 @@
       "leak_m3": 0.0,
       "pump_energy_kwh": 2381.762,
       "stress_days_total": 0,
+      "mean_soil_moisture": 0.178,
+      "min_soil_moisture": 0.103,
       "mean_relative_yield": 1.0,
       "min_relative_yield": 1.0,
       "days_low_pressure": 0
@@ -163,6 +175,8 @@
       "leak_m3": 0.0,
       "pump_energy_kwh": 2224.116,
       "stress_days_total": 64,
+      "mean_soil_moisture": 0.173,
+      "min_soil_moisture": 0.076,
       "mean_relative_yield": 0.923,
       "min_relative_yield": 0.918,
       "days_low_pressure": 10
