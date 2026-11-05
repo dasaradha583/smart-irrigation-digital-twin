@@ -67,6 +67,8 @@ def main() -> None:
     det = json.loads((O / "leak_detection" / "metrics.json").read_text())
     grid = pd.read_csv(O / "optimiser" / "grid_drought_pump_failure.csv")
     sweep = pd.read_csv(O / "optimiser" / "water_saving_sweep_baseline.csv")
+    std = pd.read_csv(O / "phase2" / "standard_network_check.csv")
+    routes = pd.read_csv(O / "phase2" / "plot_supply_routes.csv")
     weather_csv = next((ROOT / "data" / "weather").glob("*.csv"), None)
     provenance = ""
     if weather_csv is not None:
@@ -107,6 +109,8 @@ def main() -> None:
         rows.append({"Scenario": name.replace("_", " "), "Delivered to plots (m³)": f0(r["delivered_m3"]),
                      "Lost to leaks (m³)": f0(r["leak_m3"]), "Pumped (m³)": f0(r["pumped_m3"]),
                      "Pump energy (kWh)": f0(r["pump_energy_kwh"]),
+                     "Mean soil moisture (m³/m³)": f"{r['mean_soil_moisture']:.3f}",
+                     "Lowest soil moisture (m³/m³)": f"{r['min_soil_moisture']:.3f}",
                      "Stress (plot-days)": int(r["stress_days_total"]),
                      "Low-pressure days": int(r["days_low_pressure"]),
                      "Mean yield": pct(r["mean_relative_yield"]), "Worst plot": pct(r["min_relative_yield"])})
@@ -180,6 +184,12 @@ Key results:
 | Farm | Four 0.5 ha maize plots on junctions J3, J4, J6, J7, with staggered sowing (1-22 Nov 2023) and sandy loam, loam and loamy sand soils. Details in [phase1_scope.md](phase1_scope.md) |
 | Weather | Open-Meteo historical archive for 14.68° N, 77.60° E, downloaded once to `data/weather/` |
 | Dashboard | `streamlit run app/dashboard.py` |
+
+**Which pipes each plot depends on** (NetworkX graph of the network, `src/irrigation_twin/network/topology.py`). A *critical* pipe is one whose failure alone cuts the plot off from both the pump and the tank:
+
+{table(routes.rename(columns={"plot": "Plot", "junction": "Junction", "routes_from_hub": "Pipe routes from hub J2", "critical_pipes": "Critical pipes", "shortest_route_m": "Shortest route (m)"}))}
+
+This explains the scenario results. A break on P6 starves Plot D, which has no other feed. The loop through P7 gives Plots A and C a second route.
 
 ## 3. Farm model (phase 3)
 
@@ -265,7 +275,8 @@ The lowest-water trigger that keeps mean yield within 0.5 points of the default 
 
 | Check (validation plan) | Result |
 |---|---|
-| 1. Hydraulics against EPANET | WNTR pressures agree with the EPANET engine within 0.001 m over a full day (`tests/test_network.py`) |
+| 1. Standard example networks | EPANET's own example networks, run with the twin's solver and with the EPANET engine: """ + "; ".join(f"{r.network} ({r.junctions} junctions, {r.hours} h) max pressure difference {r.max_pressure_diff_m:.4f} m, max flow difference {r.max_flow_diff_Lps:.3f} L/s" for r in std.itertuples()) + f""" (`outputs/phase2/standard_network_check.csv`) |
+| 1. Our network against EPANET | WNTR pressures agree with the EPANET engine within 0.001 m over a full day (`tests/test_network.py`) |
 | 1. Mass balance | Largest daily residual across all {len(comp)} season runs: {mb:.1e} m³/s |
 | 2. ET0 against references | FAO-56 Examples 2, 3, 8, 10 and 18 reproduced. Season RMSE against Open-Meteo ET0 is {p3['rmse_vs_openmeteo_mm']:.2f} mm/day |
 | 2. Soil balance closure | Closes to 1e-9 mm every day (`tests/test_farm.py`) |

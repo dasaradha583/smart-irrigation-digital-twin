@@ -7,7 +7,7 @@ Reproduce:
 ```bash
 pip install -r requirements.txt
 python scripts/phase2_network.py   # writes outputs/phase2/
-pytest                             # 18 checks
+pytest                             # all checks
 ```
 
 ## Network
@@ -24,6 +24,17 @@ pytest                             # 18 checks
 | Farm plots | 4 | Plot A → J3, Plot B → J4, Plot C → J6, Plot D → J7 |
 
 The pump fills the tank, and the tank floats on the system. During irrigation the plots draw from both, and once the tank runs low the pump refills it. Pipe P7 gives a second route to Plots A and C, so a leak on one branch hurts some plots more than others.
+
+### Which pipes each plot depends on
+
+A NetworkX graph of the network (`src/irrigation_twin/network/topology.py`, output `plot_supply_routes.csv`) maps every plot to its supply routes and its **critical pipes**: pipes whose failure alone cuts the plot off from both the pump and the tank.
+
+| Plot | Junction | Pipe routes from hub J2 | Critical pipes |
+|---|---|---|---|
+| A | J3 | 2 (P2, or P4-P5-P7) | none |
+| B | J4 | 2 to J3, then P3 | P3 |
+| C | J6 | 2 (P4-P5, or P2-P7) | none |
+| D | J7 | 2 to J6, then P6 | P6 |
 
 ### Pressure-driven demand
 
@@ -80,6 +91,8 @@ Output files in `outputs/phase2/`:
 | `scenario_summary.csv` | The scenario table above |
 | `leak_size_sweep.csv` | The sweep table above |
 | `network_parameters.csv` | Every parameter, its value and its source |
+| `plot_supply_routes.csv` | NetworkX supply routes and critical pipes per plot |
+| `standard_network_check.csv` | Validation on EPANET's Net1 and Net3 |
 | `farm_network.inp` | The network as an EPANET input file (opens in EPANET 2.2) |
 | `network.png`, `scenarios.png` | Figures above |
 
@@ -87,6 +100,7 @@ Output files in `outputs/phase2/`:
 
 | Check | Result |
 |---|---|
+| Standard EPANET example networks (Net1, 9 junctions, 24 h; Net3, 92 junctions, 7 days), WNTRSimulator vs EPANET engine | Net1 max pressure difference 0.0001 m; Net3 0.0004 m and 0.03 L/s (`standard_network_check.csv`) |
 | WNTR vs EPANET engine, demand-driven, full day at 1-minute steps | Pressures agree within 0.001 m and flows within 0.01 L/s |
 | Mass balance at every step: supply = deliveries + leak + tank inflow | Residual < 1e-8 m³/s for baseline, leak and pump failure |
 | Tank storage: level change × area = integrated net inflow | Error appears only in the step where the tank hits a limit or the pump switches, and stays below one step of flow (< 1 m³) |

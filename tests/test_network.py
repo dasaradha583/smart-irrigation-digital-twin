@@ -182,3 +182,41 @@ def test_timed_pump_outage_recovers(network):
 def test_pump_outage_rejects_bad_window(network):
     with pytest.raises(ValueError):
         inject_pump_failure(network, start_time_s=5, end_time_s=5)
+
+
+# ---- validation check 1 on standard EPANET example networks -------------
+
+@pytest.mark.parametrize("net", ["Net1", "Net3"])
+def test_standard_example_network_matches_epanet(net, tmp_path):
+    """The plan's check 1: a standard EPANET example network gives the same
+    pressures and flows with the solver the twin uses (WNTRSimulator) as with
+    the EPANET engine itself."""
+    import os
+
+    path = os.path.join(os.path.dirname(wntr.__file__), "library", "networks", f"{net}.inp")
+    epanet = wntr.sim.EpanetSimulator(wntr.network.WaterNetworkModel(path)).run_sim(
+        file_prefix=str(tmp_path / net))
+    wn = wntr.network.WaterNetworkModel(path)
+    ours = wntr.sim.WNTRSimulator(wn).run_sim()
+    common = epanet.node["pressure"].index.intersection(ours.node["pressure"].index)
+    assert len(common) == len(epanet.node["pressure"])
+    j = wn.junction_name_list
+    dp = (epanet.node["pressure"].loc[common, j] - ours.node["pressure"].loc[common, j]).abs().max().max()
+    dq = (epanet.link["flowrate"].loc[common] - ours.link["flowrate"].loc[common]).abs().max().max()
+    assert dp < 0.01   # m
+    assert dq < 1e-4   # m^3/s
+
+
+# ---- NetworkX supply routes ------------------------------------------------
+
+def test_supply_routes_and_critical_pipes():
+    from irrigation_twin.network.topology import network_graph, plot_supply_table, supply_routes
+
+    wn = build_farm_network()
+    table = plot_supply_table(wn)
+    assert table.loc["Plot_D", "critical_pipes"] == "P6"   # P6 is Plot D's only feed
+    assert table.loc["Plot_B", "critical_pipes"] == "P3"
+    assert table.loc["Plot_A", "critical_pipes"] == "none"  # the P7 loop gives a second route
+    assert table.loc["Plot_C", "critical_pipes"] == "none"
+    g = network_graph(wn)
+    assert all(r[-1] == "P6" for r in supply_routes(g, "J7"))

@@ -6,7 +6,7 @@ The project merges two models: **AquaTwin**, a water distribution network simula
 
 ## Status
 
-All phases and stretch goals are built and tested (`pytest`: 49 checks). The season results and the final report are generated from real weather by one command:
+All phases and stretch goals are built and tested (`pytest`: 52 checks). The season results and the final report are generated from real weather by one command:
 
 ```bash
 ./scripts/run_all.sh
@@ -84,7 +84,8 @@ print(result.plot_summary())     # per plot
 
 ```
 src/irrigation_twin/
-  network/       WNTR network, demand, leak/pump-failure injection, hydraulics (phase 2)
+  network/       WNTR network, demand, leak/pump-failure injection, hydraulics,
+                 NetworkX supply routes (phase 2)
   farm/          FAO-56 ET0, crop and soil, plot water balance, weather (phase 3)
   twin.py        the coupled daily loop and scenarios (phase 4)
   catalog.py     standard season scenarios, result storage (phase 5)

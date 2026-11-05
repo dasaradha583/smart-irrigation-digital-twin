@@ -136,6 +136,8 @@ class SeasonResult:
             "deep_percolation_mm": g["deep_percolation_mm"].sum(),
             "stress_days": g["stressed"].sum(),
             "min_ks": g["ks"].min(),
+            "mean_soil_moisture": g["soil_moisture"].mean(),
+            "min_soil_moisture": g["soil_moisture"].min(),
         })
         ky = ky if ky is not None else self.meta.get("ky", 1.25)
         out["relative_yield"] = np.clip(1.0 - ky * (1.0 - out["eta_mm"] / out["etc_mm"]), 0.0, 1.0)
@@ -153,6 +155,8 @@ class SeasonResult:
             "leak_m3": float(net["leak_m3"].sum()),
             "pump_energy_kwh": float(net["pump_energy_kwh"].sum()),
             "stress_days_total": int(ps["stress_days"].sum()),
+            "mean_soil_moisture": float(ps["mean_soil_moisture"].mean()),
+            "min_soil_moisture": float(ps["min_soil_moisture"].min()),
             "mean_relative_yield": float(ps["relative_yield"].mean()),
             "min_relative_yield": float(ps["relative_yield"].min()),
             "days_low_pressure": int((net["min_plot_pressure_irrigating_m"] < REQUIRED_PRESSURE - 1e-6).sum()),
